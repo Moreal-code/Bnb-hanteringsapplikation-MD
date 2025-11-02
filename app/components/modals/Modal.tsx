@@ -144,6 +144,7 @@ const Modal: React.FC<Modalprops> = ({
               transition
               absolute
               left-9
+              cursor-pointer
               "
                 >
                   <IoMdClose size={18} />
