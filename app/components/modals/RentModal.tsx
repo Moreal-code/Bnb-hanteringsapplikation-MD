@@ -12,6 +12,7 @@ import Map from "../Map";
 import dynamic from "next/dynamic";
 import Counter from "../inputs/Counter";
 import Input from "../inputs/Input";
+import ImageUpload from "../inputs/ImageUpload";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -20,8 +21,9 @@ enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
   INFO = 2,
-  DESCRIPTION = 3,
-  PRICE = 4,
+  IMAGES = 3,
+  DESCRIPTION = 4,
+  PRICE = 5,
 }
 
 const RentModal = () => {
@@ -57,6 +59,7 @@ const RentModal = () => {
   const guestCount = watch("guestCount");
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
+  const imageSrc = watch("imageSrc");
 
   const Map = useMemo(
     () =>
@@ -76,8 +79,10 @@ const RentModal = () => {
 
   const onBack = useCallback(() => {
     setStep((value) => {
-      // Hoppa över IMAGES steget när man går tillbaka
       if (value === STEPS.DESCRIPTION) {
+        return STEPS.IMAGES;
+      }
+      if (value === STEPS.IMAGES) {
         return STEPS.INFO;
       }
       return value - 1;
@@ -86,8 +91,10 @@ const RentModal = () => {
 
   const onNext = useCallback(() => {
     setStep((value) => {
-      // Hoppa över IMAGES steget (finns inte längre)
       if (value === STEPS.INFO) {
+        return STEPS.IMAGES;
+      }
+      if (value === STEPS.IMAGES) {
         return STEPS.DESCRIPTION;
       }
       return value + 1;
@@ -99,6 +106,7 @@ const RentModal = () => {
       return onNext();
     }
 
+    console.log("Submitting data:", data);
     setIsLoading(true);
 
     axios
@@ -203,6 +211,21 @@ const RentModal = () => {
           subtitle="How many bathrooms do you have?"
           value={bathroomCount}
           onChange={(value) => setCustomValue("bathroomCount", value)}
+        />
+      </div>
+    );
+  }
+
+  if (step === STEPS.IMAGES) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Add a photo of your place"
+          subtitle="Show guests what your place looks like!"
+        />
+        <ImageUpload
+          value={imageSrc}
+          onChange={(value) => setCustomValue("imageSrc", value)}
         />
       </div>
     );

@@ -30,7 +30,13 @@ export default async function getCurrentUser() {
       return null;
     }
 
-    return currentUser;
+    const { emailVerified, ...userWithoutDates } = currentUser;
+    
+    return {
+      ...userWithoutDates,
+      createdAt: currentUser.createdAt.toISOString(),
+      updatedAt: currentUser.updatedAt.toISOString(),
+    };
   } catch (error: any) {
     return null;
   }
