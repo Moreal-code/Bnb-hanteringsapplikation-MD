@@ -1,5 +1,6 @@
 import prisma from "@/app/libs/prismadb";
 import { SafeReservation } from "@/app/types";
+import { Prisma } from "@/app/generated/prisma";
 
 interface IParams {
   listingId?: string;
@@ -11,7 +12,7 @@ export default async function getReservations(params: IParams): Promise<SafeRese
   try {
     const { listingId, userId, authorId } = params;
 
-    const query: any = {};
+    const query: Prisma.ReservationWhereInput = {};
 
     if (listingId) {
       query.listingId = listingId;
@@ -47,7 +48,7 @@ export default async function getReservations(params: IParams): Promise<SafeRese
     }));
 
     return safeReservations;
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(error instanceof Error ? error.message : String(error));
   }
 }

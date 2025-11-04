@@ -1,4 +1,5 @@
 import prisma from "../libs/prismadb";
+import { Prisma } from "../generated/prisma";
 
 export interface IListingsParams {
   userId?: string;
@@ -24,7 +25,7 @@ export default async function getListings(params: IListingsParams) {
       category,
     } = params;
 
-    let query: any = {};
+    const query: Prisma.ListingWhereInput = {};
 
     if (userId) {
       query.userId = userId;
@@ -85,7 +86,7 @@ export default async function getListings(params: IListingsParams) {
     }));
 
     return safeListings;
-  } catch (error) {
+  } catch (error: unknown) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }
 }

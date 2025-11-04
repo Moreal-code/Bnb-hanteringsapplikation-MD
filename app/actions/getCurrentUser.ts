@@ -38,7 +38,7 @@ export default async function getCurrentUser(): Promise<SafeUser | null> {
       createdAt: currentUser.createdAt.toISOString(),
       updatedAt: currentUser.updatedAt.toISOString(),
     };
-  } catch (error: any) {
+  } catch {
     return null;
   }
 }

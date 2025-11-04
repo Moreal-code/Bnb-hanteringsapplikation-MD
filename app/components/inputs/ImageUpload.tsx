@@ -5,8 +5,12 @@ import Image from "next/image";
 import { useCallback } from "react";
 import { TbPhotoPlus } from "react-icons/tb";
 
-declare global {
-  var cloudinary: any;
+interface CloudinaryUploadResult {
+  event?: string;
+  info?: {
+    secure_url?: string;
+    url?: string;
+  };
 }
 
 interface ImageUploadProps {
@@ -16,7 +20,7 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
   const handleUpload = useCallback(
-    (result: any) => {
+    (result: CloudinaryUploadResult) => {
       console.log("Upload result:", result);
       // Handle different event types from Cloudinary
       if (result?.event === "success" || result?.event === "upload-success") {

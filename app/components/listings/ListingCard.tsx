@@ -1,6 +1,5 @@
 "use client";
 
-import { Listing, Reservation } from "@/app/generated/prisma";
 import useCountries from "@/app/hooks/useCountries";
 
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
@@ -19,6 +18,7 @@ interface ListingCardProps {
   actionLabel?: string;
   actionId?: string;
   currentUser?: SafeUser | null;
+  onEdit?: (listing: SafeListing) => void;
 }
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
@@ -28,6 +28,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
   actionLabel,
   actionId = "",
   currentUser,
+  onEdit,
 }) => {
   const router = useRouter();
   const { getByValue } = useCountries();
@@ -43,6 +44,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
       onAction?.(actionId);
     },
     [onAction, actionId, disabled]
+  );
+
+  const handleEdit = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      onEdit?.(data);
+    },
+    [onEdit, data]
   );
 
   const price = useMemo(() => {
@@ -112,14 +121,25 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold">${price}</div>
           {!reservation && <div className="font-light">night</div>}
         </div>
-        {onAction && actionLabel && (
-          <Button
-            disabled={disabled}
-            small
-            label={actionLabel}
-            onClick={handleCancel}
-          />
-        )}
+        <div className="flex flex-row gap-2">
+          {onEdit && (
+            <Button
+              disabled={disabled}
+              small
+              label="Edit"
+              onClick={handleEdit}
+              outline
+            />
+          )}
+          {onAction && actionLabel && (
+            <Button
+              disabled={disabled}
+              small
+              label={actionLabel}
+              onClick={handleCancel}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ListingCard from "../components/listings/ListingCard";
+import useEditModal from "../hooks/useEditModal";
 
 interface PropertiesClientProps {
   listings: SafeListing[];
@@ -20,9 +21,10 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
   currentUser,
 }) => {
   const router = useRouter();
+  const editModal = useEditModal();
   const [deletingId, setDeletingId] = useState("");
 
-  const onCancel = useCallback(
+  const onDelete = useCallback(
     (id: string) => {
       setDeletingId(id);
       axios
@@ -39,6 +41,13 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
         });
     },
     [router]
+  );
+
+  const onEdit = useCallback(
+    (listing: SafeListing) => {
+      editModal.onOpen(listing);
+    },
+    [editModal]
   );
 
   return (
@@ -62,10 +71,11 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
             key={listing.id}
             data={listing}
             actionId={listing.id}
-            onAction={onCancel}
+            onAction={onDelete}
             disabled={deletingId === listing.id}
             actionLabel="Delete property"
             currentUser={currentUser}
+            onEdit={onEdit}
           />
         ))}
       </div>

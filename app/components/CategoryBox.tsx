@@ -20,13 +20,13 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   const params = useSearchParams();
 
   const handleClick = useCallback(() => {
-    let currentQuery = {};
+    let currentQuery: Record<string, string | string[] | undefined> = {};
 
     if (params) {
       currentQuery = qs.parse(params.toString());
     }
 
-    const updatedQuery: any = {
+    const updatedQuery: Record<string, string | string[] | undefined> = {
       ...currentQuery,
       category: label,
     };

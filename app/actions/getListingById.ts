@@ -29,7 +29,7 @@ export default async function getListingById(params: IParams) {
         updatedAt: listing.user.updatedAt.toISOString(),
       },
     };
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(error instanceof Error ? error.message : String(error));
   }
 }
