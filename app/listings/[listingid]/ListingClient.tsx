@@ -5,7 +5,7 @@ import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import ListingReservation from "@/app/components/listings/ListingReservation";
 import { categories } from "@/app/components/navbar/Categories";
-import { Listing, Reservation } from "@/app/generated/prisma";
+import { Listing } from "@/app/generated/prisma";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeReservation, SafeUser } from "@/app/types";
 import axios from "axios";
