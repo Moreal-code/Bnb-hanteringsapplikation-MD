@@ -5,14 +5,6 @@ import Image from "next/image";
 import { useCallback } from "react";
 import { TbPhotoPlus } from "react-icons/tb";
 
-interface CloudinaryUploadResult {
-  event?: string;
-  info?: {
-    secure_url?: string;
-    url?: string;
-  };
-}
-
 interface ImageUploadProps {
   onChange: (value: string) => void;
   value: string;
@@ -20,11 +12,23 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
   const handleUpload = useCallback(
-    (result: CloudinaryUploadResult) => {
+    (result: unknown) => {
       console.log("Upload result:", result);
       // Handle different event types from Cloudinary
-      if (result?.event === "success" || result?.event === "upload-success") {
-        const url = result?.info?.secure_url || result?.info?.url;
+      const typedResult = result as {
+        event?: string;
+        info?: string | { secure_url?: string; url?: string };
+      };
+      
+      if (typedResult?.event === "success" || typedResult?.event === "upload-success") {
+        let url: string | undefined;
+        
+        if (typeof typedResult.info === "string") {
+          url = typedResult.info;
+        } else if (typedResult.info && typeof typedResult.info === "object") {
+          url = typedResult.info.secure_url || typedResult.info.url;
+        }
+        
         if (url && typeof url === "string") {
           console.log("Setting image URL:", url);
           onChange(url);

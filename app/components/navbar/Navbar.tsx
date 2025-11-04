@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import Search from "./Search";
 import UserMenu from "./UserMenu";
 import Categories from "./Categories";
+import { Suspense } from "react";
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
@@ -31,12 +32,16 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
             "
           >
             <Logo />
-            <Search />
+            <Suspense fallback={null}>
+              <Search />
+            </Suspense>
             <UserMenu currentUser={currentUser} />
           </div>
         </Container>
       </div>
-      <Categories />
+      <Suspense fallback={null}>
+        <Categories />
+      </Suspense>
     </div>
   );
 };

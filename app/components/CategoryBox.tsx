@@ -23,7 +23,11 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
     let currentQuery: Record<string, string | string[] | undefined> = {};
 
     if (params) {
-      currentQuery = qs.parse(params.toString());
+      const parsed = qs.parse(params.toString());
+      // Convert null values to undefined and filter them out
+      currentQuery = Object.fromEntries(
+        Object.entries(parsed).filter(([, value]) => value !== null)
+      ) as Record<string, string | string[] | undefined>;
     }
 
     const updatedQuery: Record<string, string | string[] | undefined> = {
