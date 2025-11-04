@@ -25,7 +25,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
+  let currentUser = null;
+  try {
+    currentUser = await getCurrentUser();
+  } catch (error) {
+    console.error("Error getting current user:", error);
+    // Continue without user - app will still work
+  }
+  
   return (
     <html lang="en">
       <body className={`${font.className} antialiased`}>
