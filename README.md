@@ -1,24 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Airbnb Clone - Next.js App
 
-## Getting Started
+Detta är en Airbnb-klon byggd med Next.js, TypeScript, Prisma och MongoDB.
 
-First, run the development server:
+## Förutsättningar
+
+- Node.js 18+ installerat
+- MongoDB databas (lokal eller MongoDB Atlas)
+- npm, yarn, pnpm eller bun
+
+## Installation
+
+1. **Klona repot och installera dependencies:**
+
+```bash
+npm install
+# eller
+yarn install
+# eller
+pnpm install
+```
+
+2. **Skapa `.env` fil i root-mappen med följande variabler:**
+
+```env
+DATABASE_URL="mongodb://localhost:27017/my-airbnb-app"
+# eller för MongoDB Atlas:
+# DATABASE_URL="mongodb+srv://username:password@cluster.mongodb.net/my-airbnb-app"
+
+NEXTAUTH_SECRET="din-hemliga-nyckel-här"
+NEXTAUTH_URL="http://localhost:3000"
+
+# För bilduppladdning (Cloudinary):
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="ditt-cloudinary-namn"
+```
+
+3. **Generera Prisma Client:**
+
+```bash
+npx prisma generate
+```
+
+4. **Pusha databas-schemat till MongoDB:**
+
+```bash
+npx prisma db push
+```
+
+## Köra applikationen
+
+### Development Server
 
 ```bash
 npm run dev
-# or
+# eller
 yarn dev
-# or
+# eller
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Öppna [http://localhost:3000](http://localhost:3000) i din webbläsare.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
+
+## API Routes
+
+Applikationen har följande API-rutter för listings (Property):
+
+- **GET** `/api/listings` - Hämta alla listings (med query-parametrar för filtrering)
+- **GET** `/api/listings/[id]` - Hämta en specifik listing
+- **POST** `/api/listings` - Skapa ny listing (kräver autentisering)
+- **PUT** `/api/listings/[id]` - Uppdatera listing (kräver autentisering)
+- **DELETE** `/api/listings/[id]` - Radera listing (kräver autentisering)
+
+### Testa API-rutterna
+
+**GET (i webbläsare):**
+
+```
+http://localhost:3000/api/listings
+http://localhost:3000/api/listings/[listingId]
+```
+
+**För POST/PUT/DELETE** behöver du vara inloggad. Testa via applikationens UI eller använd Postman/Insomnia med session cookies.
+
+## Projektstruktur
+
+```
+app/
+├── api/              # API-rutter
+│   ├── listings/     # Property CRUD operations
+│   └── reservations/ # Booking operations
+├── actions/          # Server Actions
+├── components/       # React-komponenter
+└── ...
+prisma/
+└── schema.prisma     # Databas-schema
+```
+
+## Teknologier
+
+- **Next.js 15** - React framework
+- **TypeScript** - Typad JavaScript
+- **Prisma** - ORM för MongoDB
+- **NextAuth** - Autentisering
+- **Tailwind CSS** - Styling
+- **Axios** - HTTP-klient
 
 ## Learn More
 
